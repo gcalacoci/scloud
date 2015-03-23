@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     Copyright (C) 2015  Giulio Calacoci <asdmaster@gmail.com>
 
@@ -16,11 +17,23 @@
 
 """
 import soundcloud
+import urllib3
+urllib3.disable_warnings()
 import sys
 from pprint import pprint
 import config as c
 from jinja2 import Environment, PackageLoader
+
+def custom_urlencode_filter(value):
+    try:
+#        print >> sys.stderr, value
+        return value.encode('utf-8').strip()
+    except:
+ #       print >> sys.stderr, "errore: %s " % value
+        pass
+
 env = Environment(loader=PackageLoader('soundcloud_cli', 'templates'))
+env.filters['custom_urlencode_filter'] = custom_urlencode_filter
 
 fname =sys.argv[1]
 trks = {}
